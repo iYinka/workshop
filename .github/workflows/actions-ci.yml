@@ -49,6 +49,29 @@ jobs:
             - name: NPM test
               run: npm test --if-present
 
+
+
+    pr_commented:
+      # This job only runs for pull request comments
+      name: PR comment
+      if: ${{ github.event.issue.pull_request }}
+      runs-on: ubuntu-latest
+      steps:
+        - run: |
+            echo A comment on PR $NUMBER
+          env:
+            NUMBER: ${{ github.event.issue.number }}
+
+    issue_commented:
+      # This job only runs for issue comments
+      name: Issue comment
+      if: ${{ !github.event.issue.pull_request }}
+      runs-on: ubuntu-latest
+      steps:
+        - run: |
+            echo A comment on issue $NUMBER
+          env:
+            NUMBER: ${{ github.event.issue.number }}
             # - name: Archive production artifacts
             #   uses: actions/upload-artifact@v4
             #   with:
@@ -62,38 +85,25 @@ jobs:
             #     name: code-coverage-report
             #     path: output/test/code-coverage.html
 
-    comment-in-pr:
-        runs-on: ubuntu-latest
-        permissions:
-          contents: write
-          pull-requests: write
-          repository-projects: write
-          id-token: write
+    # comment-in-pr:
+    #     runs-on: ubuntu-latest
+    #     permissions:
+    #       contents: write
+    #       pull-requests: write
+    #       repository-projects: write
+    #       id-token: write
 
-        steps:
-          - name: Checkout
-            uses: actions/checkout@v4
-          - uses: actions/github-script@v6
-            with:
-              script: |
-                const requiredLabels = ['no release notes', 'public release notes'];
-                let labels = [];
-
-                if (context.payload.pull_request) {
-                  labels = context.payload.pull_request.labels;
-                } else if (context.payload.issue) {
-                  labels = context.payload.issue.labels;
-                }
-
-                if (labels.filter(l => requiredLabels.includes(l.name)).length === 0) {
-                  throw new Error(`Required labels: ${requiredLabels.join(', ')}`);
-                }
-              # script: |
-              #   github.rest.issues.createComment({
-              #     issue_number: context.issue.number,
-              #     owner: context.repo.owner,
-              #     repo: context.repo.repo,
-              #     body: '👋 Thanks for the report you gave! If need be, there will be an issued response.'
-              #   })
+    #     steps:
+    #       - name: Checkout
+    #         uses: actions/checkout@v4
+    #       - uses: actions/github-script@v6
+    #         with:
+    #           script: |
+    #             github.rest.issues.createComment({
+    #               issue_number: context.issue.number,
+    #               owner: context.repo.owner,
+    #               repo: context.repo.repo,
+    #               body: '👋 Thanks for the report you gave! If need be, there will be an issued response.'
+    #             })
 
 
