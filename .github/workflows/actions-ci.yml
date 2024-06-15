@@ -51,7 +51,7 @@ jobs:
 
     pr-commented:
         name: PR commented
-        if: ${{ github.event_name == 'pull_request' && github.event.action == 'opened' }}
+        if: ${{ github.event_name == 'pull_request' }}
         runs-on: ubuntu-latest
         steps:
           - uses: actions/github-script@v3
