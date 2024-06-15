@@ -2,11 +2,8 @@ name: Github Action Demo
 run-name: ${{github.actor}}
 
 on:
-    # workflow_dispatch:
-        push:
         pull_request:
-            # types: [opened, edited, synchronize, reopened]
-            branches: [ gitactions ]
+            branches: [ master ]
             paths:
                 - econtact_server/**
 
