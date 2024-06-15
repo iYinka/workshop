@@ -3,7 +3,7 @@ run-name: ${{github.actor}}
 
 on:
         pull_request:
-            branches: [ master ]
+            branches: [ gitactions ]
             paths:
                 - econtact_server/**
 
