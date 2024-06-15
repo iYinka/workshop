@@ -49,62 +49,51 @@ jobs:
             - name: NPM test
               run: npm test --if-present
 
+    pr-commented:
+        name: PR commented
+        if: github.event.issue.pull_request
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/github-script@v3
+            id: get-pr
+            with:
+              script: |
+                const request = {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: context.issue.number
+                }
+                core.info(`Getting PR #${request.pull_number} from ${request.owner}/${request.repo}`)
+                try {
+                  const result = await github.pulls.get(request)
+                  return result.data
+                } catch (err) {
+                  core.setFailed(`Request failed with error ${err}`)
+                }
+          - uses: actions/checkout@v2
+            with:
+              repository: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}
+              ref: ${{ fromJSON(steps.get-pr.outputs.result).head.sha }} # or .head.ref for branch name
 
 
-    pr_commented:
-      # This job only runs for pull request comments
-      name: PR comment
-      if: ${{ github.event.issue.pull_request }}
-      runs-on: ubuntu-latest
-      steps:
-        - run: |
-            echo A comment on PR $NUMBER
-          env:
-            NUMBER: ${{ github.event.issue.number }}
+    # pr_commented:
+    #   # This job only runs for pull request comments
+    #   name: Pull Request Comment
+    #   if: ${{ github.event.issue.pull_request }}
+    #   runs-on: ubuntu-latest
+    #   steps:
+    #     - run: |
+    #         echo A comment on PR $NUMBER
+    #       env:
+    #         NUMBER: ${{ github.event.issue.number }}
 
-    issue_commented:
-      # This job only runs for issue comments
-      name: Issue comment
-      if: ${{ !github.event.issue.pull_request }}
-      runs-on: ubuntu-latest
-      steps:
-        - run: |
-            echo A comment on issue $NUMBER
-          env:
-            NUMBER: ${{ github.event.issue.number }}
-
-            # - name: Archive production artifacts
-            #   uses: actions/upload-artifact@v4
-            #   with:
-            #     name: dist-without-markdown
-            #     path: |
-            #       dist
-            #       !dist/**/*.md
-            # - name: Archive code coverage results
-            #   uses: actions/upload-artifact@v4
-            #   with:
-            #     name: code-coverage-report
-            #     path: output/test/code-coverage.html
-
-    # comment-in-pr:
-    #     runs-on: ubuntu-latest
-    #     permissions:
-    #       contents: write
-    #       pull-requests: write
-    #       repository-projects: write
-    #       id-token: write
-
-    #     steps:
-    #       - name: Checkout
-    #         uses: actions/checkout@v4
-    #       - uses: actions/github-script@v6
-    #         with:
-    #           script: |
-    #             github.rest.issues.createComment({
-    #               issue_number: context.issue.number,
-    #               owner: context.repo.owner,
-    #               repo: context.repo.repo,
-    #               body: '👋 Thanks for the report you gave! If need be, there will be an issued response.'
-    #             })
-
-
+    # issue_commented:
+    #   # This job only runs for issue comments
+    #   name: Issue A Comment
+    #   if: ${{ !github.event.issue.pull_request }}
+    #   runs-on: ubuntu-latest
+    #   steps:
+    #     - run: |
+    #         echo A comment on issue $NUMBER
+    #       env:
+    #         NUMBER: ${{ github.event.issue.number }}
