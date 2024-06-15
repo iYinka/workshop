@@ -5,7 +5,10 @@
     "type": "module",
     "main": "index.js",
     "scripts": {
-        "start": "node index.js"
+        "start": "node index.js",
+        "test": "echo ''skipped test",
+        "build": "node build",
+        "lint": "echo 'skipped lint'"
     },
     "dependencies": {
         "bcrypt": "^5.1.0",
