@@ -44,6 +44,7 @@ jobs:
               run: npm run test --if-present
 
             - name: NPM run build
+              working-directory: ./econtact_server
               if: steps.dep-installation.outcome && steps.eslint.outcome == 'success'
               id: build
               run: npm run build
