@@ -68,8 +68,10 @@ jobs:
                     console.log(${{ steps.test}})
                     console.log(${{ steps.build}})
                     console.log(${{ steps.artifact-build}})
-                    const body = `**Welcome**, new contributor!👋
+                    const body = `Hi! 👋 Thanks for taking the time to contribute to our project. We're excited to review your changes.
 
+                    *Repo: ${{github.repository}}, URL: ${{github.repositoryUrl}}
+                    *Owner: @${{github.repository_owner}}
                     *Pusher: @${{github.actor}}, workflow: ${{github.workflow}}
                     #### Dependencies Installation \`${{steps.dep-installation.outcome}}\`
                     #### Lint \`${{steps.eslint.outcome}}\`
