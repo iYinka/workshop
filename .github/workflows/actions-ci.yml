@@ -63,7 +63,7 @@ jobs:
                 script: |
                     console.log(context.issue.number)
                     console.log(context.issue)
-                    console.log(${{ steps.dep-installation.outcome}})
+                    console.log(${{ steps.dep-installation.outputs}})
                     console.log(${{ steps.eslint}})
                     console.log(${{ steps.test}})
                     console.log(${{ steps.build}})
