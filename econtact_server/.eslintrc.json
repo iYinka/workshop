@@ -1,0 +1,51 @@
+// {
+//     "ecmaFeatures": {
+//         "jsx": true,
+//         "modules": true,
+//         "spread": true,
+//         "restParams": true
+//     },
+//     "env": {
+//         "browser": true,
+//         "node": true,
+//         "es6": true
+//     },
+//     "rules": {
+//         // "no-unused-vars": 2,
+//         // "no-unused-vars": "error",
+//         "no-unused-vars": "off",
+//         "no-undef": 2
+//     },
+//     "parserOptions": {
+//         "sourceType": "module"
+//     }
+// }
+
+{
+    "env": {
+        "es6": true,
+        "node": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "rules": {
+        "no-prototype-builtins": "warn",
+        "indent": ["off", 4],
+        "linebreak-style": ["off", "unix"],
+        "semi": ["error", "always"],
+        "no-unused-vars": [
+            "off",
+            {
+                "vars": "local"
+            }
+        ],
+        "no-console": ["off"]
+    },
+    "globals": {
+        "gracefulShutdown": "readonly",
+        "_language": "writable"
+    }
+}

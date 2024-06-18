@@ -9,6 +9,7 @@ import Contact from "../model/contactModel.js";
 import dotenv from "dotenv";
 dotenv.config();
 
+// eslint-disable-next-line no-dupe-keys
 let occupations = [{ id: 1, name: "Actor", id: 2, named: "Engineer" }];
 
 // RETRIEVE ALL ENTRIES
@@ -126,6 +127,7 @@ export const updateContact = async (req, res) => {
         const updatedContact = await contact.save();
         if (!updatedContact) {
             res.status(404).send({
+                // eslint-disable-next-line no-undef
                 message: `Can not update entry with ${id}. Maybe entry not found!`,
             });
         } else {

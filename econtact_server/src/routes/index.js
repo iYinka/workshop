@@ -5,7 +5,7 @@ import {
     errorHandler,
     loginUser,
     registerUser,
-} from "../controllers/auth/auth.js";
+} from "../../controllers/auth/auth.js";
 import {
     createContact,
     deleteContact,
@@ -13,9 +13,9 @@ import {
     getContact,
     getOccupations,
     updateContact,
-} from "../controllers/entries.js";
-import { privacy } from "../middleware/private.js";
-import User from "../model/userModel.js";
+} from "../../controllers/entries.js";
+import { privacy } from "../../middleware/private.js";
+import User from "../../model/userModel.js";
 
 const router = express.Router();
 
@@ -52,7 +52,6 @@ const router = express.Router();
 router.post("/register_user", errorHandler(registerUser));
 router.post("/login_user", errorHandler(loginUser));
 router.delete("/delete_user", privacy, errorHandler(deleteUser));
-
 
 // CONTACTS ROUTES
 router.get("/contacts/", privacy, getAllContacts);

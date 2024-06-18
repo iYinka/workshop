@@ -3,6 +3,7 @@ import User from "../../model/userModel.js";
 
 ////////////GOOGLE AUTH2.0///////////////
 export const GoogleAuth = () => {
+    // eslint-disable-next-line no-undef
     passport.use(
         new GoogleStrategy(
             {
@@ -26,10 +27,12 @@ export const GoogleAuth = () => {
     );
 
     //This serialization of session works for all OAuth.
+    // eslint-disable-next-line no-undef
     passport.serializeUser(function (user, done) {
         done(null, user.id);
     });
 
+    // eslint-disable-next-line no-undef
     passport.deserializeUser(function (id, done) {
         User.findById(id, function (err, user) {
             done(err, user);
