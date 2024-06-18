@@ -11,6 +11,9 @@ jobs:
     nodejs_setup:
         name: NodeJS Development Github Actions test
         runs-on: ubuntu-latest
+        defaults:
+          run:
+           working-directory: ./econtact_server
 
         steps:
             - name: Check out Git repository
@@ -20,7 +23,6 @@ jobs:
               uses: actions/setup-node@v4
 
             - name: Install dependencies
-              working-directory: ./econtact_server
               id: dep-installation
               run: |
                   npm install
