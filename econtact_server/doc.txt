@@ -1,2 +1,1 @@
-A new test. This is a test for PR.
-Babel added to package.json.
+A new test. This is a test for PR. Babel added to package.json.

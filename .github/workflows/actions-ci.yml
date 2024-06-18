@@ -63,14 +63,14 @@ jobs:
                 script: |
                     console.log(context.issue.number)
                     console.log(context.issue)
-                    console.log(${{ steps.dep-installation}})
-                    console.log(${{ steps.eslint}})
-                    console.log(${{ steps.test}})
-                    console.log(${{ steps.build}})
-                    console.log(${{ steps.artifact-build}})
+                    console.log(${{ steps.dep-installation.conclusion}})
+                    console.log(${{ steps.eslint.conclusion}})
+                    console.log(${{ steps.test.conclusion}})
+                    console.log(${{ steps.build.conclusion}})
+                    console.log(${{ steps.artifact-build.conclusion}})
                     const body = `Hi! 👋 Thanks for taking the time to contribute to our project. We're excited to review your changes.
 
-                    *Repo: ${{github.repository}}, URL: @${{github.repositoryUrl}}
+                    *Repo: ${{github.repository}}, URL: ${{github.repositoryUrl}}
                     *Owner: @${{github.repository_owner}}
                     *Pusher: @${{github.actor}}, workflow: ${{github.workflow}}
                     #### Dependencies Installation \`${{steps.dep-installation.outcome}}\`
@@ -83,9 +83,25 @@ jobs:
 
                     Happy PR-ing!!! 😂`
 
+                    const issues = await github.rest.pulls.list({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      state: 'open',
+                      head: `${context.repo.owner}:${context.ref.replace('refs/heads/', '')}`
+                    })
+
+                    const pr = context.issue.number || issues.data[0].number
                     await  github.rest.issues.createComment({
-                        issue_number: context.issue.number,
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                        body: body
-                      })
+                      pr,
+                      issue_number: context.issue.number,
+                      body: body
+                    })
+
+
+                    # await  github.rest.issues.createComment({
+                    #     issue_number: context.issue.number,
+                    #     owner: context.repo.owner,
+                    #     repo: context.repo.repo,
+                    #     body: body
+                    #   })
+
