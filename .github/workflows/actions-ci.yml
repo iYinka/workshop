@@ -70,7 +70,7 @@ jobs:
                     console.log(${{ steps.artifact-build}})
                     const body = `Hi! 👋 Thanks for taking the time to contribute to our project. We're excited to review your changes.
 
-                    *Repo: ${{github.repository}}, URL: ${{github.repositoryUrl}}
+                    *Repo: ${{github.repository}}, URL: @${{github.repositoryUrl}}
                     *Owner: @${{github.repository_owner}}
                     *Pusher: @${{github.actor}}, workflow: ${{github.workflow}}
                     #### Dependencies Installation \`${{steps.dep-installation.outcome}}\`
