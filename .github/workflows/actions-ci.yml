@@ -41,12 +41,12 @@ jobs:
             - name: NPM test
               id: test
               continue-on-error: true
-              run: npm test --if-present
+              run: npm run test --if-present
 
             - name: NPM run build
               if: steps.dep-installation.outcome && steps.eslint.outcome == 'success'
               id: build
-              run: npm build --if-present
+              run: npm run build
 
             - name: Archive Production App Artifact
               if: steps.build.outcome == 'success'
