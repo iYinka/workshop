@@ -63,11 +63,11 @@ jobs:
                 script: |
                     console.log(context.issue.number)
                     console.log(context.issue)
-                    # console.log(${{ steps.dep-installation.conclusion}})
-                    # console.log(${{ steps.eslint.conclusion}})
-                    # console.log(${{ steps.test.conclusion}})
-                    # console.log(${{ steps.build.conclusion}})
-                    # console.log(${{ steps.artifact-build.conclusion}})
+                    console.log(${{ steps.dep-installation.conclusion}})
+                    console.log(${{ steps.eslint.conclusion}})
+                    console.log(${{ steps.test.conclusion}})
+                    console.log(${{ steps.build.conclusion}})
+                    console.log(${{ steps.artifact-build.conclusion}})
                     const body = `Hi! 👋 Thanks for taking the time to contribute to our project. We're excited to review your changes.
 
                     *Repo: ${{github.repository}}, URL: ${{github.repositoryUrl}}
@@ -89,3 +89,97 @@ jobs:
                         repo: context.repo.repo,
                         body: body
                       })
+
+
+
+# name: Github Action Demo on Econtact NodeJS Application
+# run-name: ${{github.actor}}
+
+# on:
+#     pull_request:
+#       branches: [ master ]
+#       paths:
+#         - econtact_server/**
+
+# jobs:
+#     nodejs_setup:
+#         name: NodeJS Development Github Actions test
+#         runs-on: ubuntu-latest
+#         permissions:
+#           contents: write
+#           pull-requests: write
+#           repository-projects: write
+#         defaults:
+#           run:
+#            working-directory: ./econtact_server
+
+#         steps:
+#             - name: Check out Git repository
+#               uses: actions/checkout@v4
+
+#             - name: NodeJS setup
+#               uses: actions/setup-node@v4
+
+#             - name: Install dependencies
+#               id: dep-installation
+#               run: |
+#                   npm install
+#                   npm install --only=dev
+
+#             - name: Run ESLint
+#               if: steps.dep-installation.outcome == 'success'
+#               id: eslint
+#               continue-on-error: true
+#               run: npm run lint
+
+#             - name: NPM test
+#               id: test
+#               continue-on-error: true
+#               run: npm run test --if-present
+
+#             - name: NPM run build
+#               if: steps.dep-installation.outcome && steps.eslint.outcome == 'success'
+#               id: build
+#               run: npm run build
+
+#             - name: Archive Production App Artifact
+#               if: steps.build.outcome == 'success'
+#               id: artifact-build
+#               uses: actions/upload-artifact@v4
+#               with:
+#                 name: Build App Artifact
+#                 path: dist
+
+#             - name: PR Comments
+#               if: contains(fromJSON('["push", "pull_request"]'), github.event_name)
+#               uses: actions/github-script@v7
+#               with:
+#                 script: |
+#                     console.log(context.issue.number)
+#                     console.log(context.issue)
+#                     # console.log(${{ steps.dep-installation.conclusion}})
+#                     # console.log(${{ steps.eslint.conclusion}})
+#                     # console.log(${{ steps.test.conclusion}})
+#                     # console.log(${{ steps.build.conclusion}})
+#                     # console.log(${{ steps.artifact-build.conclusion}})
+#                     const body = `Hi! 👋 Thanks for taking the time to contribute to our project. We're excited to review your changes.
+
+#                     *Repo: ${{github.repository}}, URL: ${{github.repositoryUrl}}
+#                     *Owner: @${{github.repository_owner}}
+#                     *Pusher: @${{github.actor}}, workflow: ${{github.workflow}}
+#                     #### Dependencies Installation \`${{steps.dep-installation.outcome}}\`
+#                     #### Lint \`${{steps.eslint.outcome}}\`
+#                     #### test \`${{steps.test.outcome}}\`
+#                     #### build \`${{steps.build.outcome}}\`
+#                     #### artifact \`${{steps.artifact-build.outcome}}\`
+
+#                     Kindly make give do a pull request but first take a look at the [contributing guide](CONTRIBUTING.md). Your PR will be responded to accordingly 👍.
+
+#                     Happy PR-ing!!! 😂`
+
+#                     await  github.rest.issues.createComment({
+#                         issue_number: context.issue.number,
+#                         owner: context.repo.owner,
+#                         repo: context.repo.repo,
+#                         body: body
+#                       })
