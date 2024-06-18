@@ -63,11 +63,11 @@ jobs:
                 script: |
                     console.log(context.issue.number)
                     console.log(context.issue)
-                    console.log(${{ steps.dep-installation.conclusion}})
-                    console.log(${{ steps.eslint.conclusion}})
-                    console.log(${{ steps.test.conclusion}})
-                    console.log(${{ steps.build.conclusion}})
-                    console.log(${{ steps.artifact-build.conclusion}})
+                    # console.log(${{ steps.dep-installation.conclusion}})
+                    # console.log(${{ steps.eslint.conclusion}})
+                    # console.log(${{ steps.test.conclusion}})
+                    # console.log(${{ steps.build.conclusion}})
+                    # console.log(${{ steps.artifact-build.conclusion}})
                     const body = `Hi! 👋 Thanks for taking the time to contribute to our project. We're excited to review your changes.
 
                     *Repo: ${{github.repository}}, URL: ${{github.repositoryUrl}}
