@@ -21,7 +21,7 @@ jobs:
 
             - name: Install dependencies
               id: dep-installation
-              run: npm ci
+              run: npm install
 
             - name: Run ESLint
               if: steps.dep-installation.outcome == 'success'
@@ -59,7 +59,7 @@ jobs:
                     console.log(${{ steps.test}})
                     console.log(${{ steps.build}})
                     console.log(${{ steps.artifact-build}})
-                    const body = `**Welcome**, new contributor! 👋
+                    const body = `**Welcome**, new contributor!👋
 
                     *Pusher: @${{github.actor}}, workflow: ${{github.workflow}}
                     #### Dependencies Installation \`${{steps.dep-installation.outcome}}\`
