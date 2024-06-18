@@ -7,7 +7,6 @@ on:
       paths:
         - econtact_server/**
 
-
 jobs:
     nodejs_setup:
         name: NodeJS Development Github Actions test
