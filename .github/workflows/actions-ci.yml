@@ -11,13 +11,14 @@ jobs:
     nodejs_setup:
         name: NodeJS Development Github Actions test
         runs-on: ubuntu-latest
+        defaults:
+          run:
+           working-directory: ./econtact_server
         permissions:
           contents: write
           pull-requests: write
           repository-projects: write
-        defaults:
-          run:
-           working-directory: ./econtact_server
+
 
         steps:
             - name: Check out Git repository
@@ -44,8 +45,8 @@ jobs:
               run: npm run test --if-present
 
             - name: NPM run build
-              working-directory: ./econtact_server
               if: steps.dep-installation.outcome && steps.eslint.outcome == 'success'
+              working-directory: ./econtact_server
               id: build
               run: npm run build
 
