@@ -12,7 +12,6 @@
         "build": "mkdir dist && babel src -s -d dist"
     },
     "dependencies": {
-        "@babel/cli": "^7.24.7",
         "@babel/preset-env": "^7.24.7",
         "babel-cli": "^6.26.0",
         "bcryptjs": "^2.4.3",
@@ -35,5 +34,9 @@
         "passport-local-mongoose": "^7.1.2",
         "path": "^0.12.7",
         "uuid": "^8.3.2"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.16",
+        "webpack-cli": "^5.1.4"
     }
 }
