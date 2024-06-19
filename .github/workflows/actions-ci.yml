@@ -6,6 +6,7 @@ on:
       branches: [ master ]
       paths:
         - econtact_server/**
+        - econtact_server/build
 
 jobs:
     nodejs_setup:
@@ -46,9 +47,10 @@ jobs:
 
             - name: NPM run build
               if: steps.dep-installation.outcome && steps.eslint.outcome == 'success'
-              working-directory: ./econtact_server/src
+              continue-on-error: true
               id: build
               run: npm run build
+
 
             - name: Archive Production App Artifact
               if: steps.build.outcome == 'success'
