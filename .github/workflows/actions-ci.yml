@@ -58,7 +58,7 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                 name: Build App Artifact
-                path: dist
+                path: econtact_server/dist
 
             - name: PR Comments
               if: contains(fromJSON('["push", "pull_request"]'), github.event_name)
