@@ -131,7 +131,7 @@ jobs:
         permissions:
           issues: write
         steps:
-          - run: gh issue edit "$NUMBER"
+          - run: gh issue edit
             env:
               GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               GH_REPO: ${{ github.repository }}
