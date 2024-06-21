@@ -97,7 +97,7 @@ jobs:
     create-issue-if-jo-fails:
       needs: nodejs_setup
       runs-on: ubuntu-latest
-      if: always() && needs.job-that-might-fail.result == 'failure'
+      if: always() && needs.nodejs_setup.result == 'failure'
       steps:
         - name: Checkout Code
           uses: actions/checkout@v4
