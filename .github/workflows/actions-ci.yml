@@ -36,8 +36,8 @@ jobs:
             - name: Install dependencies
               id: dep-installation
               run: |
-                  npm install
-                  # npm install --only=dev
+                  npm cinstall
+                  npm cinstall --only=dev
 
             - name: Run ESLint
               if: steps.dep-installation.outcome == 'success'
