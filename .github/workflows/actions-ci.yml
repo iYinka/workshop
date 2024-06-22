@@ -104,7 +104,7 @@ jobs:
       runs-on: ubuntu-latest
       if: always() && needs.nodejs_setup.result == 'failure'
       steps:
-        - name: Open new ISSUE on GuillaumeFalourd/poc-github-actions repository
+        - name: Open new ISSUE on ${{github.repository}}
           uses: GuillaumeFalourd/open-issue-action@v1
           with:
             access-token: ${{ secrets.REPO_ACTION_TOKEN }}
