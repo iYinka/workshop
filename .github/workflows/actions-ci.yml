@@ -8,7 +8,9 @@ on:
         - econtact_server/**
         - econtact_server/build
     issues:
-      types: [opened, labeled]
+      types:
+        - reopened
+        - opened
 
 
 jobs:
