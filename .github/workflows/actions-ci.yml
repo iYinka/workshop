@@ -7,6 +7,9 @@ on:
       paths:
         - econtact_server/**
         - econtact_server/build
+    issues:
+      types: [opened, labeled]
+
 
 jobs:
     nodejs_setup:
@@ -93,6 +96,23 @@ jobs:
                         repo: context.repo.repo,
                         body: body
                       })
+
+    create-issue-if-jo-fails:
+      needs: nodejs_setup
+      runs-on: ubuntu-latest
+      if: always() && needs.nodejs_setup.result == 'failure'
+      steps:
+        - name: Open new ISSUE on GuillaumeFalourd/poc-github-actions repository
+          if: contains(github.event.label.name , 'documentation')
+          uses: GuillaumeFalourd/open-issue-action@v1
+          with:
+            access-token: ${{ secrets.workflow_token }}
+            repo-owner: GuillaumeFalourd
+            repo-name: poc-github-actions
+            issue-title: Custom title for new ISSUE
+            issue-body: Custom message for new ISSUE
+            issue-labels: bug # Not mandatory
+            issue-assignees: <username> # Not mandatory
 
   #  create-issue-if-jo-fails:
   #     needs: nodejs_setup
