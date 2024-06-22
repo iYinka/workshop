@@ -97,13 +97,12 @@ jobs:
                         body: body
                       })
 
-    create-issue-if-jo-fails:
+    create-issue-if-job-fails:
       needs: nodejs_setup
       runs-on: ubuntu-latest
       if: always() && needs.nodejs_setup.result == 'failure'
       steps:
         - name: Open new ISSUE on GuillaumeFalourd/poc-github-actions repository
-          if: contains(github.event.label.name , 'documentation')
           uses: GuillaumeFalourd/open-issue-action@v1
           with:
             access-token: ${{ secrets.workflow_token }}
