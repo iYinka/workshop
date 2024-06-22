@@ -105,10 +105,10 @@ jobs:
         - name: Open new ISSUE on GuillaumeFalourd/poc-github-actions repository
           uses: GuillaumeFalourd/open-issue-action@v1
           with:
-            access-token: ${{ secrets.workflow_token }}
-            repo-owner: GuillaumeFalourd
-            repo-name: poc-github-actions
-            issue-title: Custom title for new ISSUE
-            issue-body: Custom message for new ISSUE
-            issue-labels: bug # Not mandatory
-            issue-assignees: <username> # Not mandatory
+            access-token: ${{ secrets.REPO_ACTION_TOKEN }}
+            repo-owner: ${{github.repository_owner}}
+            repo-name: ${{github.repository}}
+            issue-title: Bug To Fix
+            issue-body: Please fix this bug and try again.
+            issue-labels: Bug!
+            issue-assignees: ${{github.actor}}
