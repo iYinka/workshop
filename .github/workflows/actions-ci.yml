@@ -105,7 +105,7 @@ jobs:
         - name: Open new ISSUE on GuillaumeFalourd/poc-github-actions repository
           uses: GuillaumeFalourd/open-issue-action@v1
           with:
-            access-token: ${{ secrets.REPO_ACTION_TOKEN }}
+            access-token: ${{ secrets.workflow_token }}
             repo-owner: ${{github.repository_owner}}
             repo-name: ${{github.repository}}
             issue-title: Bug To Fix
