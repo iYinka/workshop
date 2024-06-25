@@ -33,14 +33,14 @@ jobs:
               id: dep-installation
               continue-on-error: true
               run: |
-                  npm cinstall
+                  npm install
 
             - name: Handle Issue for Install dependencies
               uses: iyinka/workshop/.github/actions/issues-handler@dev-issues
               with:
                   outcome: ${{steps.dep-installation.outcome}}
                   label: dep-installation-failed
-                  title: dep-installation-failed
+                  title: dep-installation-failure
 
             - name: Run ESLint
               if: steps.dep-installation.outcome == 'success'
@@ -53,20 +53,20 @@ jobs:
               with:
                   outcome: ${{steps.eslint.outcome}}
                   label: eslint-failed
-                  title: eslint-failed
+                  title: eslint-failure
 
 
             - name: NPM test
               id: test
               continue-on-error: true
-              run: npmi run test --if-present
+              run: npm run test --if-present
 
             - name: Handle Issue for NPM test
               uses: iyinka/workshop/.github/actions/issues-handler@dev-issues
               with:
                   outcome: ${{steps.test.outcome}}
                   label: test-failed
-                  title: test-failed
+                  title: test-failure
 
             - name: NPM run build
               if: steps.dep-installation.outcome && steps.eslint.outcome == 'success'
