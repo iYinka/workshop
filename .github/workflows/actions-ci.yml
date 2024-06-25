@@ -7,11 +7,6 @@ on:
       paths:
         - econtact_server/**
         - econtact_server/build
-    issues:
-      types:
-        - reopened
-        - opened
-
 
 jobs:
     nodejs_setup:
@@ -24,6 +19,7 @@ jobs:
           contents: write
           pull-requests: write
           repository-projects: write
+          issues: write
 
 
         steps:
