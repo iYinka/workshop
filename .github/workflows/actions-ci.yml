@@ -36,11 +36,10 @@ jobs:
             - name: Install dependencies
               id: dep-installation
               run: |
-                  npm install
-                  npm install --only=dev
+                  npm cinstall
 
             - name: Handle Issue for Install dependencies
-              uses: operah24/My-Diary/.github/actions/handle-issues@workshop-3
+              uses: iyinka/workshop/.github/actions/issues-handler@dev-issues
               with:
                   outcome: ${{steps.dep-installation.outcome}}
                   label: dep-installation-failed
