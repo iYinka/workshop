@@ -1,4 +1,4 @@
-name: Github Action Demo
+name: Github Action Demo on Econtact NodeJS Application
 run-name: ${{github.actor}}
 
 on:
@@ -6,18 +6,21 @@ on:
       branches: [ master ]
       paths:
         - econtact_server/**
+        - econtact_server/build
 
 jobs:
     nodejs_setup:
         name: NodeJS Development Github Actions test
         runs-on: ubuntu-latest
+        defaults:
+          run:
+           working-directory: ./econtact_server
         permissions:
           contents: write
           pull-requests: write
           repository-projects: write
-        defaults:
-          run:
-           working-directory: ./econtact_server
+          issues: write
+
 
         steps:
             - name: Check out Git repository
@@ -28,9 +31,16 @@ jobs:
 
             - name: Install dependencies
               id: dep-installation
+              continue-on-error: true
               run: |
                   npm install
-                  npm install --only=dev
+
+            - name: Handle Issue for Install dependencies
+              uses: iyinka/workshop/.github/actions/issues-handler@dev-issues
+              with:
+                  outcome: ${{steps.dep-installation.outcome}}
+                  label: dep-installation-failed
+                  title: dep-installation-failure
 
             - name: Run ESLint
               if: steps.dep-installation.outcome == 'success'
@@ -38,15 +48,38 @@ jobs:
               continue-on-error: true
               run: npm run lint
 
+            - name: Handle Issue for Run ESLint
+              uses: iyinka/workshop/.github/actions/issues-handler@dev-issues
+              with:
+                  outcome: ${{steps.eslint.outcome}}
+                  label: eslint-failed
+                  title: eslint-failure
+
+
             - name: NPM test
               id: test
               continue-on-error: true
               run: npm run test --if-present
 
+            - name: Handle Issue for NPM test
+              uses: iyinka/workshop/.github/actions/issues-handler@dev-issues
+              with:
+                  outcome: ${{steps.test.outcome}}
+                  label: test-failed
+                  title: test-failure
+
             - name: NPM run build
               if: steps.dep-installation.outcome && steps.eslint.outcome == 'success'
+              continue-on-error: true
               id: build
               run: npm run build
+
+            - name: Handle Issue for NPM run build
+              uses: iyinka/workshop/.github/actions/issues-handler@dev-issues
+              with:
+                  outcome: ${{steps.build.outcome}}
+                  label: build-failed
+                  title: build-failed
 
             - name: Archive Production App Artifact
               if: steps.build.outcome == 'success'
@@ -54,7 +87,7 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                 name: Build App Artifact
-                path: dist
+                path: econtact_server/dist
 
             - name: PR Comments
               if: contains(fromJSON('["push", "pull_request"]'), github.event_name)
@@ -68,8 +101,10 @@ jobs:
                     console.log(${{ steps.test}})
                     console.log(${{ steps.build}})
                     console.log(${{ steps.artifact-build}})
-                    const body = `**Welcome**, new contributor!👋
+                    const body = `Hi! 👋 Thanks for taking the time to contribute to our project. We're excited to review your changes.
 
+                    *Repo: ${{github.repository}}, URL: ${{github.repositoryUrl}}
+                    *Owner: @${{github.repository_owner}}
                     *Pusher: @${{github.actor}}, workflow: ${{github.workflow}}
                     #### Dependencies Installation \`${{steps.dep-installation.outcome}}\`
                     #### Lint \`${{steps.eslint.outcome}}\`
@@ -87,3 +122,4 @@ jobs:
                         repo: context.repo.repo,
                         body: body
                       })
+
