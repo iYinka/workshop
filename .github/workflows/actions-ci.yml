@@ -39,16 +39,38 @@ jobs:
                   npm cinstall
                   npm cinstall --only=dev
 
+            - name: Handle Issue for Install dependencies
+              uses: iyinka/workshop/.github/actions/issues-handler@dev-issues
+              with:
+                  outcome: ${{steps.dep-installation.outcome}}
+                  label: dep-installation-failed
+                  title: dep-installation-failed
+
             - name: Run ESLint
               if: steps.dep-installation.outcome == 'success'
               id: eslint
               continue-on-error: true
               run: npm run lint
 
+            - name: Handle Issue for Run ESLint
+              uses: iyinka/workshop/.github/actions/issues-handler@dev-issues
+              with:
+                  outcome: ${{steps.eslint.outcome}}
+                  label: eslint-failed
+                  title: eslint-failed
+
+
             - name: NPM test
               id: test
               continue-on-error: true
               run: npm run test --if-present
+
+            - name: Handle Issue for NPM test
+              uses: iyinka/workshop/.github/actions/issues-handler@dev-issues
+              with:
+                  outcome: ${{steps.test.outcome}}
+                  label: test-failed
+                  title: test-failed
 
             - name: NPM run build
               if: steps.dep-installation.outcome && steps.eslint.outcome == 'success'
@@ -56,6 +78,12 @@ jobs:
               id: build
               run: npm run build
 
+            - name: Handle Issue for NPM run build
+              uses: iyinka/workshop/.github/actions/issues-handler@dev-issues
+              with:
+                  outcome: ${{steps.build.outcome}}
+                  label: build-failed
+                  title: build-failed
 
             - name: Archive Production App Artifact
               if: steps.build.outcome == 'success'
@@ -99,18 +127,3 @@ jobs:
                         body: body
                       })
 
-    create-issue-if-job-fails:
-      needs: nodejs_setup
-      runs-on: ubuntu-latest
-      if: always() && needs.nodejs_setup.result == 'failure'
-      steps:
-        - name: Open new ISSUE on ${{github.repository}}
-          uses: GuillaumeFalourd/open-issue-action@v1
-          with:
-            access-token: ${{ secrets.REPO_ACTION_TOKEN }}
-            repo-owner: ${{github.repository_owner}}
-            repo-name: ${{github.repository}}
-            issue-title: Bug To Fix
-            issue-body: Please fix this bug and try again.
-            issue-labels: Bug!
-            issue-assignees: ${{github.actor}}
