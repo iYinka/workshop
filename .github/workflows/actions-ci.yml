@@ -46,7 +46,7 @@ jobs:
               if: steps.dep-installation.outcome == 'success'
               id: eslint
               continue-on-error: true
-              run: npm run linti
+              run: npm run lint
 
             - name: Handle Issue for Run ESLint
               uses: iyinka/workshop/.github/actions/issues-handler@dev-issues
@@ -72,7 +72,7 @@ jobs:
               if: steps.dep-installation.outcome && steps.eslint.outcome == 'success'
               continue-on-error: true
               id: build
-              run: npm irun build
+              run: npm run build
 
             - name: Handle Issue for NPM run build
               uses: iyinka/workshop/.github/actions/issues-handler@dev-issues
