@@ -40,7 +40,7 @@ jobs:
                   npm install --only=dev
 
             - name: Handle Issue for Install dependencies
-              uses: iyinka/workshop/.github/actions/issues-handler@dev-issues
+              uses: operah24/My-Diary/.github/actions/handle-issues@workshop-3
               with:
                   outcome: ${{steps.dep-installation.outcome}}
                   label: dep-installation-failed
