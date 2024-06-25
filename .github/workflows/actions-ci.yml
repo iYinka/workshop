@@ -36,8 +36,8 @@ jobs:
             - name: Install dependencies
               id: dep-installation
               run: |
-                  npm cinstall
-                  npm cinstall --only=dev
+                  npm install
+                  npm install --only=dev
 
             - name: Handle Issue for Install dependencies
               uses: iyinka/workshop/.github/actions/issues-handler@dev-issues
