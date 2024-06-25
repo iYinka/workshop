@@ -36,15 +36,15 @@ jobs:
             - name: Install dependencies
               id: dep-installation
               run: |
-                  npm install
-                  npm install --only=dev
+                  npm cinstall
+                  npm cinstall --only=dev
 
-            # - name: Handle Issue for Install dependencies
-            #   uses: iyinka/workshop/.github/actions/issues-handler@dev-issues
-            #   with:
-            #       outcome: ${{steps.dep-installation.outcome}}
-            #       label: dep-installation-failed
-            #       title: dep-installation-failed
+            - name: Handle Issue for Install dependencies
+              uses: iyinka/workshop/.github/actions/issues-handler@dev-issues
+              with:
+                  outcome: ${{steps.dep-installation.outcome}}
+                  label: dep-installation-failed
+                  title: dep-installation-failed
 
             - name: Run ESLint
               if: steps.dep-installation.outcome == 'success'
