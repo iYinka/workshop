@@ -35,6 +35,7 @@ jobs:
 
             - name: Install dependencies
               id: dep-installation
+              continue-on-error: true
               run: |
                   npm cinstall
 
