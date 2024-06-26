@@ -104,18 +104,18 @@ jobs:
                         body: body
                       })
 
-            - name: Generate README
-              run: |
-                  echo "# My Project" >> (link unavailable)
-                  echo "" >> (link unavailable)
-                  echo "Description: ${GITHUB_REPO_DESCRIPTION}" >> (link unavailable)
-                  echo "" >> (link unavailable)
-                  echo "## Contents" >> (link unavailable)
-                  ls -l | awk '{print "- ["$9"](".$9")"}' >> (link unavailable)
-            - name: Commit and push README
-              uses: actions/commit@v2
-              with:
-                  message: "Generated README"
-                  name: "GitHub Actions Bot"
-                  email: "github-actions-bot@github.com"
+            # - name: Generate README
+            #   run: |
+            #       echo "# My Project" >> (link unavailable)
+            #       echo "" >> (link unavailable)
+            #       echo "Description: ${GITHUB_REPO_DESCRIPTION}" >> (link unavailable)
+            #       echo "" >> (link unavailable)
+            #       echo "## Contents" >> (link unavailable)
+            #       ls -l | awk '{print "- ["$9"](".$9")"}' >> (link unavailable)
+            # - name: Commit and push README
+            #   uses: actions/commit@v2
+            #   with:
+            #       message: "Generated README"
+            #       name: "GitHub Actions Bot"
+            #       email: "github-actions-bot@github.com"
 
