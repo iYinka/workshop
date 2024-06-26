@@ -1,0 +1,121 @@
+name: Github Action Demo on Econtact NodeJS Application
+run-name: ${{github.actor}}
+
+on:
+    pull_request:
+      branches: [ master ]
+      paths:
+        - econtact_server/**
+        - econtact_server/build
+
+jobs:
+    nodejs_setup:
+        name: NodeJS Development Github Actions test
+        runs-on: ubuntu-latest
+        defaults:
+          run:
+           working-directory: ./econtact_server
+        permissions:
+          contents: write
+          pull-requests: write
+          repository-projects: write
+          issues: write
+          statuses: write
+
+
+        steps:
+            - name: Check out Git repository
+              uses: actions/checkout@v4
+
+            - name: NodeJS setup
+              uses: actions/setup-node@v4
+
+            - name: Install dependencies
+              id: dep-installation
+              continue-on-error: true
+              run: |
+                  npm install
+
+            - name: Handle Issue for Install dependencies
+              uses: iyinka/workshop/.github/actions/issues-handler@dev-issues
+              with:
+                  outcome: ${{steps.dep-installation.outcome}}
+                  label: dep-installation-failed
+                  title: dep-installation-failure
+
+            - name: Run Super-linter
+              if: steps.dep-installation.outcome == 'success'
+              id: linter
+              continue-on-error: true
+              uses: super-linter/super-linter@v6.6.0
+              env:
+                VALIDATE_ALL_CODEBASE: false
+                DEFAULT_BRANCH: master
+                GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+            - name: Handle Issue for Run linter
+              uses: iyinka/workshop/.github/actions/issues-handler@dev-issues
+              with:
+                  outcome: ${{steps.linter.outcome}}
+                  label: linter-failed
+                  title: linter-failure
+
+
+            - name: NPM test
+              id: test
+              continue-on-error: true
+              run: npm run test --if-present
+
+            - name: Handle Issue for NPM test
+              uses: iyinka/workshop/.github/actions/issues-handler@dev-issues
+              with:
+                  outcome: ${{steps.test.outcome}}
+                  label: test-failed
+                  title: test-failure
+
+
+
+            - name: PR Comments
+              if: contains(fromJSON('["push", "pull_request"]'), github.event_name)
+              uses: actions/github-script@v7
+              with:
+                script: |
+                    console.log(context.issue.number)
+                    console.log(context.issue)
+                    console.log(${{ steps.dep-installation}})
+                    console.log(${{ steps.linter}})
+                    console.log(${{ steps.test}})
+                    const body = `Hi! 👋 Thanks for taking the time to contribute to our project. We're excited to review your changes.
+
+                    *Repo: ${{github.repository}}, URL: ${{github.repositoryUrl}}
+                    *Owner: @${{github.repository_owner}}
+                    *Pusher: @${{github.actor}}, workflow: ${{github.workflow}}
+                    #### Dependencies Installation \`${{steps.dep-installation.outcome}}\`
+                    #### Lint \`${{steps.linter.outcome}}\`
+                    #### test \`${{steps.test.outcome}}\`
+                    Kindly make give do a pull request but first take a look at the [contributing guide](CONTRIBUTING.md). Your PR will be responded to accordingly 👍.
+
+                    Happy PR-ing!!! 😂`
+
+                    await  github.rest.issues.createComment({
+                        issue_number: context.issue.number,
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        body: body
+                      })
+
+            # - name: Generate README
+            #   run: |
+            #       echo "# My Project" >> (link unavailable)
+            #       echo "" >> (link unavailable)
+            #       echo "Description: ${GITHUB_REPO_DESCRIPTION}" >> (link unavailable)
+            #       echo "" >> (link unavailable)
+            #       echo "## Contents" >> (link unavailable)
+            #       ls -l | awk '{print "- ["$9"](".$9")"}' >> (link unavailable)
+            # - name: Commit and push README
+            #   uses: actions/commit@v2
+            #   with:
+            #       message: "Generated README"
+            #       name: "GitHub Actions Bot"
+            #       email: "github-actions-bot@github.com"
+

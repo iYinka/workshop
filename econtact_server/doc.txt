@@ -1,1 +1,2 @@
-A new test. This is a test for PR. Babel added to package.json.
+A new test. This is a test for PR.
+PR comments... Issues and Comment to open issues for failure and comment on success applied successfully.
