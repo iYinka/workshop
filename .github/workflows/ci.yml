@@ -20,6 +20,7 @@ jobs:
           pull-requests: write
           repository-projects: write
           issues: write
+          statuses: write
 
 
         steps:
@@ -42,18 +43,22 @@ jobs:
                   label: dep-installation-failed
                   title: dep-installation-failure
 
-            - name: Run ESLint
+            - name: Run Super-linter
               if: steps.dep-installation.outcome == 'success'
-              id: eslint
+              id: linter
               continue-on-error: true
-              run: npm run lint
+              uses: super-linter/super-linter@v6.6.0
+              env:
+                VALIDATE_ALL_CODEBASE: false
+                DEFAULT_BRANCH: master
+                GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-            - name: Handle Issue for Run ESLint
+            - name: Handle Issue for Run linter
               uses: iyinka/workshop/.github/actions/issues-handler@dev-issues
               with:
-                  outcome: ${{steps.eslint.outcome}}
-                  label: eslint-failed
-                  title: eslint-failure
+                  outcome: ${{steps.linter.outcome}}
+                  label: linter-failed
+                  title: linter-failure
 
 
             - name: NPM test
@@ -78,18 +83,16 @@ jobs:
                     console.log(context.issue.number)
                     console.log(context.issue)
                     console.log(${{ steps.dep-installation}})
-                    console.log(${{ steps.eslint}})
+                    console.log(${{ steps.linter}})
                     console.log(${{ steps.test}})
-                    console.log(${{ steps.build}})
                     const body = `Hi! 👋 Thanks for taking the time to contribute to our project. We're excited to review your changes.
 
                     *Repo: ${{github.repository}}, URL: ${{github.repositoryUrl}}
                     *Owner: @${{github.repository_owner}}
                     *Pusher: @${{github.actor}}, workflow: ${{github.workflow}}
                     #### Dependencies Installation \`${{steps.dep-installation.outcome}}\`
-                    #### Lint \`${{steps.eslint.outcome}}\`
+                    #### Lint \`${{steps.linter.outcome}}\`
                     #### test \`${{steps.test.outcome}}\`
-                    #### build \`${{steps.build.outcome}}\`
                     Kindly make give do a pull request but first take a look at the [contributing guide](CONTRIBUTING.md). Your PR will be responded to accordingly 👍.
 
                     Happy PR-ing!!! 😂`
@@ -100,4 +103,19 @@ jobs:
                         repo: context.repo.repo,
                         body: body
                       })
+
+            - name: Generate README
+              run: |
+                  echo "# My Project" >> (link unavailable)
+                  echo "" >> (link unavailable)
+                  echo "Description: ${GITHUB_REPO_DESCRIPTION}" >> (link unavailable)
+                  echo "" >> (link unavailable)
+                  echo "## Contents" >> (link unavailable)
+                  ls -l | awk '{print "- ["$9"](".$9")"}' >> (link unavailable)
+            - name: Commit and push README
+              uses: actions/commit@v2
+              with:
+                  message: "Generated README"
+                  name: "GitHub Actions Bot"
+                  email: "github-actions-bot@github.com"
 
